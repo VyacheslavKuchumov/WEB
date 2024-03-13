@@ -1,16 +1,14 @@
-const { Sequelize } = require("sequelize")
-
-const sequelize = new Sequelize('postgres://postgres:postgre@localhost:5432/db1233');
+const { Sequelize } = require('sequelize')
+const sequelize = new Sequelize('postgres://postgres:postgres@localhost:5432/web_db')
 
 async function connect() {
-  try {
-    await sequelize.authenticate();
-    console.log('db connected');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
+    try{
+        await sequelize.authenticate()
+        console.log('db connected')
+    } catch (error){
+        console.error('bruh: ', error)
+    }
 }
 
 connect()
-
-module.exports = { sequelize }
+module.exports = {sequelize}

@@ -12,11 +12,13 @@ app.use(cors({
 }))
 
 const auth_routes = require('./routes/auths')
+const user_routes = require('./routes/users')
 
 
 
 
 app.use('/api/auth', auth_routes)
+app.use('/api/users', user_routes)
 
 app.use((error, request, reponse, next) => {
   if (error instanceof SyntaxError)

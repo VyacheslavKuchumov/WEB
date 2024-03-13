@@ -9,5 +9,13 @@ const verifyToken = (req, res, next) => {
 
     jwt.verify(token, secret, function (err, decoded){
         if (err) return res.status(401).send({message: 'unauthorized!'})
+        req.userId = decoded.uid
+        next()
     })
 }
+
+const authJwt= {
+    verifyToken
+}
+
+module.exports = authJwt
