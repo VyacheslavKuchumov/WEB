@@ -12,5 +12,10 @@ instance.interceptors.request.use(
     function (config){
         config.headers['x-access-token'] = localStorage.getItem('accesToken')
         return config
+    },
+    function (error){
+        return Promise.reject(error)
     }
 )
+
+export default instance
