@@ -1,4 +1,4 @@
-# testik
+# web
 
 ## Project setup
 ```
