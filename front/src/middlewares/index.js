@@ -10,7 +10,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     function (config){
-        config.headers['x-access-token'] = localStorage.getItem('accesToken')
+        config.headers['x-access-token'] = localStorage.getItem('accessToken')
         return config
     },
     function (error){
