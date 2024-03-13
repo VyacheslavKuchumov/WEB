@@ -57,7 +57,7 @@ exports.signin = async (req, res) => {
 }
 
 exports.changeAccess = async(req, res) => {
-  let token_refresh =req.body.headers['x-refresh-token']
+  let token_refresh =req.headers['x-refresh-token']
   try{
     const {uid} = jwt.verify(token_refresh, secret)
     const user = await auth.findOne({uid: uid})
