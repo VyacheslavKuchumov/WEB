@@ -2,6 +2,7 @@ const { get_auth_table, auth } = require('../models/auths')
 const { user } = require('../models/users')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { createConnection } = require('mongoose')
 require('dotenv').config()
 const secret = process.env.SECRET
 const { v4: uuidv4 } = require('uuid')
@@ -52,5 +53,27 @@ exports.signin = async (req, res) => {
   } catch (error) {
     return res.status(400).send({ message: error.message })
 
+  }
+}
+
+exports.changeAccess = async(req, res) => {
+  let token_refresh =req.body.headers['x-refresh-token']
+  try{
+    const {uid} = jwt.verify(token_refresh, secret)
+    const user = await auth.findOne({uid: uid})
+    if (!user) return res.status(404).send({message:'user not found'})
+    if (token_refresh != user['RefreshToken']) return res.status(403).send({message:'unauth token'})
+    let token = createAccess(user.uid)
+    token_refresh = createRefresh(user.uid)
+    await auth.update({AccessToken: token, RefreshToken: token_refresh},
+      {where: {uid: user.uid}})
+    return res.status(200).send({
+      accessToken: token,
+      refreshToken: token_refresh,
+      uid: user.uid
+    })
+  }
+  catch (error){
+    return res.status(500).send({message: error.message})
   }
 }

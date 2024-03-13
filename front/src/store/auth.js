@@ -1,9 +1,13 @@
+import instance from '@/middlewares'
 import router from '@/router'
 
 const checkStatuses = (status) => {
   switch (status) {
     case 400:
       window.alert('Проблема на сервере')
+      return false
+    case 403:
+      window.alert('Пользователь не авторизован')
       return false
     case 404:
       window.alert('Пользователь не найден')
@@ -67,6 +71,9 @@ export default {
       router.push('/')
       return
     },
+    async changeAccess({}){
+      const response = await instance.post('api/auth/changeAccess')
+    }
   },
   namespaced: true
 }
