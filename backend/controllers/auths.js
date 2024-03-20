@@ -28,6 +28,7 @@ exports.signup = async (req, res) => {
         })
         return res.status(201).send({ message: 'registered', uid: cur_user.uid })
     } catch (error) {
+        console.log(error.message)
         return res.status(500).send({ message: error.message })
     }
 
