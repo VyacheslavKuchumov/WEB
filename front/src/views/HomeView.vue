@@ -2,8 +2,9 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <div class="window">
-      <div class="label">
+      <div class="window-label">
         Кол-во лайков: {{ likes }}
+        {{text}}
       </div>
       <div class="btns">
         <button class="btn like" @click="addlike">
@@ -20,22 +21,34 @@
 </template>
 
 <script>
-// @ is an alias to /src
-//import HelloWorld from '@/components/HelloWorld.vue'
+import {mapActions } from 'vuex'
 
 export default {
   name: 'HomeView',
   data() {
     return {
-      likes: 0
+      likes: 0,
+      text: '',
+      uid:''
     }
   },
   methods: {
+
+    ...mapActions({
+      updateLike: 'user/updateLikes',
+      getUser: 'user/getUserByUid'
+    }),
     addlike() {
       this.likes += 1
+      if (this.uid){
+        this.updateLike({likes:this.likes})
+      }
     },
     adddislike() {
       this.likes -= 1
+      if (this.uid){
+        this.updateLike({likes:this.likes})
+      }
     },
   },
   watch: {
@@ -43,6 +56,16 @@ export default {
       if (this.likes < 0) {
         this.likes = 0
       }
+    }
+  },
+  async mounted(){
+    this.uid = localStorage.getItem('uid')
+    if (this.uid){
+      await this.getUser()
+      this.likes = this.$store.state.user.user?.likes || 0
+      this.text = `вы авторизованы как ${this.uid} 씨발`
+    } else{
+      this.text = 'вы не авторизованы, счетчик обнулен'
     }
   },
   components: {

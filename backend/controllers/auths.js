@@ -60,7 +60,7 @@ exports.changeAccess = async (req, res) => {
     let token_refresh = req.body.headers['x-refresh-token']
     try {
         const { uid } = jwt.verify(token_refresh, secret)
-        const user = await auth.findOne({ uid: uid })
+        const user = await auth.findOne({where: { uid: uid }})
         if (!user) return res.status(404).send({ message: 'User not found' })
         // if (token_refresh != user['RefreshToken']) return res.status(403).send({ message: 'Unauthorized' })
         let token = createAccess(user.uid)

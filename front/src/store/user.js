@@ -16,7 +16,13 @@ export default {
             const user = await instance.get(`/api/users/${uid}`)
             if (user) return commit('setUser', user.data)
             console.log(user.message);
+        },
+        async updateLikes({}, {likes}){
+            const response = await instance.put('/api/users/likes', {likes})
+            if (response.ok) return console.log('ok');
+            console.log(response.statusText);
         }
     },
+    
     namespaced: true
 }
