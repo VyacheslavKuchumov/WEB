@@ -1,18 +1,10 @@
-const {auth, get_auth_table} = require('../../models/auths')
+const { auth } = require('../../models/auths')
 
-checkDuplicateEmail = (req, res, next) =>{
-    get_auth_table()
-    auth.findOne({
-        where:{
-            email: req.body.email.toLowerCase()
-        }
-    }).then(user => {
-        if (user){
-            res.status(400).send({message: 'Email is already in use! bruh'})
-            return
-        }
-        next()
-    })
+checkDuplicateEmail = async (req, res, next) => {
+
+    const authed = await auth.findOne({ where: { email: req.body.email.toLowerCase() } })
+    if (authed) return res.status(405).send({ message: 'Email is already use!' })
+    next()
 }
 
 const verifySignUp = {

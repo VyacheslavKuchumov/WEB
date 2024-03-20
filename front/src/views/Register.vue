@@ -1,19 +1,16 @@
 <template>
     <div class="home">
-        <form @submit.prevent="go_register()" class="reg-form">
-            <span>Create an account:</span>
-            <input type="email" class="form-input" placeholder="enter email" v-model="email">
-            <input type="password" class="form-input" placeholder="enter password" v-model="password">
-            <input type="text" class="form-input" placeholder="enter nickname" v-model="name">
-            <button type="submit" class="form-btn">submit</button>
-            <span>Already have an account? <a href="/login">click here!</a></span>
+        <form @submit.prevent="go_register()">
+            <input type="email" class="form-input" placeholder="Введите email" v-model="email">
+            <input type="password" class="form-input" placeholder="Введите пароль" v-model="password">
+            <input type="text" class="form-input" placeholder="Введите имя" v-model="name">
+            <button type="submit" class="form-btn">Регистрация</button>
+            <span>Уже есть аккаунт? <a href="/login">Войти</a></span>
         </form>
-        
     </div>
 </template>
 <script>
 import { mapActions } from 'vuex';
-
 
 export default {
     name: 'register',
@@ -24,11 +21,11 @@ export default {
             name: ''
         }
     },
-    methods:{
+    methods: {
         ...mapActions({
             register: 'auth/register'
         }),
-        go_register(){
+        go_register() {
             const formData = {
                 email: this.email,
                 password: this.password,
@@ -36,19 +33,25 @@ export default {
             }
             this.register(formData)
         }
+
     }
-    
 }
 </script>
 <style>
-    .reg-form{
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        width: 30vw;
-        row-gap: 10px;
-        margin: auto;
-        background-color: whitesmoke;
-        border: 3px solid black;
-    }
+.home {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100svh;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    width: 400px;
+    row-gap: 20px;
+}
 </style>
