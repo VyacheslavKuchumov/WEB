@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('postgres://postgres:postgres@localhost:5432/db1233');
+const sequelize = new Sequelize('postgres://postgres:postgres@localhost:5432/web_db');
 
 async function connect() {
     try {
