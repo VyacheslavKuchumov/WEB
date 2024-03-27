@@ -7,11 +7,11 @@
         {{text}}
       </div>
       <div class="btns">
-        <button class="btn like" @click="addlike">
+        <button class="like" @click="addlike">
           <img src="@/assets/like.png" alt="" width="40px">
           <div>Поставить лайк</div>
         </button>
-        <button class="btn dislike" @click="adddislike">
+        <button class="dislike" @click="adddislike">
           <img src="@/assets/dislike.png" alt="" width="40px">
           <div>Поставить дизлайк</div>
         </button>
@@ -51,6 +51,9 @@ export default {
         this.updateLike({likes:this.likes})
       }
     },
+    user() {
+      return this.$store.state.user.user
+    }
   },
   watch: {
     likes() {
@@ -65,7 +68,7 @@ export default {
     if (this.uid){
       await this.getUser()
       this.likes = this.$store.state.user.user?.likes || 0
-      this.text = `вы авторизованы как ${this.uid} ${this.name} 씨발`
+      this.text = `вы авторизованы как ${this.user().name} 씨발`
     } else{
       this.text = 'вы не авторизованы, счетчик обнулен'
     }

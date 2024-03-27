@@ -1,9 +1,9 @@
 <template>
     <div class="home">
         <form @submit.prevent="go_login">
-            <input type="email" class="form-input" placeholder="Введите email" v-model="email">
-            <input type="password" class="form-input" placeholder="Введите пароль" v-model="password">
-            <button type="submit" class="form-btn">Войти</button>
+            <my-input type="email" class="form-input" placeholder="Введите email" v-model="email" value="email"></my-input>
+            <my-input type="password" class="form-input" placeholder="Введите пароль" v-model="password" value="password"></my-input>
+            <my-button type="submit" class="form-btn">Войти</my-button>
             <span>Нет аккаунта? <a href="/register">Зарегистрироваться</a></span>
         </form>
     </div>
@@ -11,6 +11,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+
 
 export default {
     name: 'login',
