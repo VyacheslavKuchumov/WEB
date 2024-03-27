@@ -85,6 +85,14 @@ export default {
             localStorage.setItem('accessToken', response.data.accessToken)
             localStorage.setItem('refreshToken', response.data.refreshToken)
             return
+        },
+        logout ({commit}) {
+            commit('setAuth', false)
+            localStorage.removeItem ('uid')
+            localStorage.removeItem ('accessToken')
+            localStorage.removeItem ('refreshToken')
+            router.push('/')
+            return
         }
     },
     namespaced: true

@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AbiutView from '../views/AboutView.vue'
+import AboutView from '../views/AboutView.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
+import instance from '@/middlewares'
 const routes = [
   {
     path: '/',
@@ -12,7 +13,8 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    component: AbiutView
+    component: AboutView,
+    meta: {auth:true}
   },
   {
     path: '/register',
@@ -29,6 +31,28 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+
+router.beforeEach(async(to, from, next) => {
+  try{
+    const requireAuth = to.matched.some(record => record?.meta.auth)
+    if (requireAuth){
+      const uid = localStorage.getItem('uid')
+      const response = await instance.get(`/api/users/${uid}`)
+      if (response.status ==200){
+        return next ()
+      } else if (response.status == 403){
+        return next ('/login')
+      }
+
+    }
+    return next()
+
+  } catch(error)  {
+    return next ('/login')
+
+  }
 })
 
 export default router

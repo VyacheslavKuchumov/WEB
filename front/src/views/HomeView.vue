@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img alt="Vue logo" src="@/assets/3d843572f09b8f0658d7c43621bc00d7.jpg">
     <div class="window">
       <div class="window-label">
         Кол-во лайков: {{ likes }}
@@ -29,7 +29,8 @@ export default {
     return {
       likes: 0,
       text: '',
-      uid:''
+      uid:'',
+      name: ''
     }
   },
   methods: {
@@ -60,10 +61,11 @@ export default {
   },
   async mounted(){
     this.uid = localStorage.getItem('uid')
+    this.name = localStorage.getItem('name')
     if (this.uid){
       await this.getUser()
       this.likes = this.$store.state.user.user?.likes || 0
-      this.text = `вы авторизованы как ${this.uid} 씨발`
+      this.text = `вы авторизованы как ${this.uid} ${this.name} 씨발`
     } else{
       this.text = 'вы не авторизованы, счетчик обнулен'
     }
@@ -80,7 +82,7 @@ export default {
   flex-direction: column;
   width: 50vw;
   height: 350px;
-  background-color: #42b983;
+  background-color: #CCF0D3;
   border-radius: 10px;
   margin: auto;
   justify-content: center;
@@ -115,5 +117,8 @@ export default {
 
 .dislike {
   color: brown;
+}
+body{
+  background-color:#CCF0D3; 
 }
 </style>

@@ -1,8 +1,7 @@
 <template>
   <div class="about">
     {{ user }}
-    <!-- <PostCreate @create="createPost" />
-    <PostList :posts="posts" /> -->
+  <img src="" alt="" srcset="">
   </div>
 </template>
 

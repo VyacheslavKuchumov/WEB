@@ -1,14 +1,34 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/register">Register</router-link> |
-    <router-link to="/login">Login</router-link>
+    <router-link to="/">Home</router-link> 
+    <router-link to="/about">About</router-link> 
+    <router-link v-if="!isAuth" to="/register">Register</router-link> 
+    <router-link v-if="!isAuth" to="/login">Login</router-link>
+    <a v-if="isAuth" @click="logout()">Logout</a>
   </nav>
   <router-view/>
 </template>
 
+<script>
+import {mapActions, mapState} from 'vuex';
+export default{
 
+  methods:{
+    ...mapActions({
+      logout:'auth/logout'
+    })
+  },
+  mounted() {
+    const uid = localStorage .getItem('uid')
+    uid ? this.$store.commit('auth/setAuth', true) : this.$store.commit('auth/setAuth', false)
+  },
+  computed:{
+    ...mapState({
+      isAuth: state => state.auth.isAuth
+    })
+  }
+}
+</script>
 
 <style>
 #app {
@@ -20,7 +40,14 @@
 }
 
 nav {
-  padding: 30px;
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+  margin: auto;
+  justify-content: center;
+  width:20vw;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 nav a {
