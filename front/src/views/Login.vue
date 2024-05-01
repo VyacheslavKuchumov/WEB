@@ -1,8 +1,8 @@
 <template>
     <div class="home">
         <form @submit.prevent="go_login">
-            <my-input type="email" value="email" class="form-input" placeholder="Введите email" v-model="email"></my-input>
-            <my-input type="password" value="password" class="form-input" placeholder="Введите пароль" v-model="password"></my-input>
+            <my-input type="email" class="form-input" placeholder="Введите email" v-model:value="email"></my-input>
+            <my-input type="password" class="form-input" placeholder="Введите пароль" v-model:value="password"></my-input>
             <my-button type="submit" class="form-btn">Войти</my-button>
             <span>Нет аккаунта? <a href="/register">Зарегистрироваться</a></span>
         </form>
