@@ -4,6 +4,7 @@ import AboutView from '../views/AboutView.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import instance from '@/middlewares'
+import Restaraunts from '@/views/Restaraunts.vue'
 const routes = [
   {
     path: '/',
@@ -25,6 +26,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/restaraunts',
+    name: 'restaraunts',
+    component: Restaraunts
   }
 ]
 

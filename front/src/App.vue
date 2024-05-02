@@ -1,10 +1,11 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> 
-    <router-link to="/about">About</router-link> 
-    <router-link v-if="!isAuth" to="/register">Register</router-link> 
-    <router-link v-if="!isAuth" to="/login">Login</router-link>
-    <a v-if="isAuth" @click="logout()">Logout</a>
+    <router-link to="/">Главная</router-link>  
+    <router-link to="/restaraunts">Рестораны</router-link>
+    <router-link to="/about">О нас</router-link> 
+    <router-link v-if="!isAuth" to="/login">Войти</router-link>
+    <a v-if="isAuth" @click="logout()">Выйти</a>
+    
   </nav>
   <router-view/>
 </template>
