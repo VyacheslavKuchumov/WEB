@@ -1,51 +1,30 @@
 <template>
-    <div class="home">
-        sus
+    <div>
+      <h1>Restaurants</h1>
+      <div>
+        {{ this.$store.state.restaurant }}
+      </div>
+      
     </div>
-</template>
-<script>
-import { mapActions } from 'vuex';
-
-export default {
-    name: 'register',
-    data() {
-        return {
-            email: '',
-            password: '',
-            name: ''
-        }
-    },
-    methods: {
-        ...mapActions({
-            register: 'auth/register'
-        }),
-        go_register() {
-            const formData = {
-                email: this.email,
-                password: this.password,
-                name: this.name
-            }
-            this.register(formData)
-        }
-
+  </template>
+  
+  <script>
+  import { mapState, useStore } from 'vuex';
+  import { onMounted } from 'vue';
+  
+  export default {
+    name: 'RestaurantView',
+    setup() {
+      const store = useStore();
+  
+      onMounted(async () => {
+        await store.dispatch('restaurant/getRestaurants');
+      });
+  
+      return {
+        ...mapState('restaurant', ['restaurants'])
+      };
     }
-}
-</script>
-<style>
-.home {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100svh;
-    justify-content: center;
-    align-items: center;
-}
-
-form {
-    display: flex;
-    padding: 20px;
-    flex-direction: column;
-    width: 400px;
-    row-gap: 20px;
-}
-</style>
+  }
+  </script>
+  
