@@ -21,6 +21,9 @@ const restaurant = sequelize.define(
         company_id: {
             type: DataTypes.BIGINT,
 
+        },
+        description:{
+            type: DataTypes.TEXT
         }
 
     },

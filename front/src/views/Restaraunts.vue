@@ -1,8 +1,19 @@
 <template>
     <div>
-      <h1>Restaurants</h1>
-      <div>
-        {{ this.$store.state.restaurant }}
+      <h1>Наши рестораны</h1>
+      <div class="main">
+        
+        
+
+        <div class="restaraunt-block" v-for="restaurant in this.$store.state.restaurant.restaurants">
+          <div class="restraraunt-name">
+            {{ restaurant.name }}
+          </div>
+          <div class="restaraunt-description">
+            {{ restaurant.description }}
+          </div>
+        </div>
+
       </div>
       
     </div>
@@ -28,3 +39,29 @@
   }
   </script>
   
+<style>
+.restaraunt-block {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 10px;
+  justify-content: center;
+  
+
+}
+
+.restraraunt-name {
+  font-size: 1.6rem;
+  padding: 5px;
+}
+
+.restaraunt-description {
+  font-size: 0.9rem;
+  width: 100%;
+  word-wrap: break-word;
+  text-align: center
+}
+
+
+
+</style>
