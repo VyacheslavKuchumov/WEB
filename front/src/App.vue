@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">Главная</router-link>  
     <router-link to="/restaraunts">Рестораны</router-link>
-    <router-link to="/reviews">Отзывы</router-link>
+    <router-link v-if="isAuth" to="/orders">Заказать</router-link>
     <router-link to="/about">О нас</router-link> 
     <router-link v-if="!isAuth" to="/login">Войти</router-link>
     
@@ -22,7 +22,7 @@ export default{
     })
   },
   mounted() {
-    const uid = localStorage .getItem('uid')
+    const uid = localStorage.getItem('uid')
     uid ? this.$store.commit('auth/setAuth', true) : this.$store.commit('auth/setAuth', false)
   },
   computed:{

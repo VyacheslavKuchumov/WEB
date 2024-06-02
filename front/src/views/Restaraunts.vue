@@ -1,110 +1,196 @@
 <template>
-    <div>
-      <h1>Наши рестораны</h1>
-      <div class="main">
-        
-        
-        
-
-        <div class="restaurant-block" v-for="restaurant in restaurants">
-          <div class="restaurant-name">
-            {{ restaurant.name }}
-          </div>
-          <div class="restaurant-description">
-            {{ restaurant.description }}
-          </div>
-
-          <div class="restaurant-review">
-            Отзывы: 
-          </div>
-
+  <div>
+    <h1>Наши рестораны</h1>
+    <div class="main">
+      <div class="restaurant-block" v-for="restaurant in restaurants" :key="restaurant.id">
+        <div class="restaurant-name">
+          {{ restaurant.name }}
         </div>
-
+        <div class="restaurant-description">
+          {{ restaurant.description }}
+        </div>
+        <button @click="toggleMenu(restaurant.id)">
+          {{ showMenu[restaurant.id] ? 'Скрыть меню' : 'Показать меню' }}
+        </button>
+        <div v-if="showMenu[restaurant.id]" class="restaurant-menu">
+          Меню:
+          <div class="menu-item" v-for="menuItem in filteredMenu(restaurant.id)" :key="menuItem.id">
+            <div class="menu-item-name">
+              {{ menuItem.name }}
+            </div>
+            <div class="menu-item-price">
+              {{ menuItem.price }} р
+            </div>
+          </div>
+        </div>
+        <button @click="toggleReviews(restaurant.id)">
+          {{ showReviews[restaurant.id] ? 'Скрыть отзывы' : 'Показать отзывы' }}
+        </button>
+        <div v-if="showReviews[restaurant.id]" class="restaurant-review">
+          Отзывы:
+          <div class="review-block" v-for="review in filteredReviews(restaurant.id)" :key="review.id">
+            <div class="review-username">
+              Пользователь: {{ getUserById(review.user_id).name }}, оценка: {{ review.review_score }}/5
+            </div>
+            <div class="review-text">
+              {{ review.review_text }}
+            </div>
+          </div>
+        </div>
         
-
       </div>
-
-      
-      
     </div>
-  </template>
-  
-  <script>
-import { useStore } from 'vuex';
-import { onMounted, computed } from 'vue';
+  </div>
+</template>
 
+<script>
+import { useStore } from 'vuex';
+import { onMounted, computed, reactive } from 'vue';
 
 export default {
   name: 'RestaurantView',
-
-  data() {
-    return {
-      
-    }
-  },
-
   setup() {
     const store = useStore();
 
+    const showReviews = reactive({});
+    const showMenu = reactive({});
+
     onMounted(async () => {
-      
       try {
         await Promise.all([
           store.dispatch('restaurant/getRestaurants'),
-          
+          store.dispatch('restaurant/getReviews'),
+          store.dispatch('user/getAllUsers'),
+          store.dispatch('restaurant/getMenus') // Assuming there's an action to fetch menus
         ]);
-        
-        
       } catch (error) {
-          console.error('An error occurred:', error);
-        }
+        console.error('An error occurred:', error);
+      }
     });
 
     const restaurants = computed(() => store.state.restaurant.restaurants);
-    
+    const reviews = computed(() => store.state.restaurant.reviews);
+    const users = computed(() => store.state.user.allUsers);
+    const menus = computed(() => store.state.restaurant.menus); // Assuming menus are stored here
+
+    const toggleReviews = (restaurantId) => {
+      showReviews[restaurantId] = !showReviews[restaurantId];
+    };
+
+    const toggleMenu = (restaurantId) => {
+      showMenu[restaurantId] = !showMenu[restaurantId];
+    };
+
+    const filteredReviews = (restaurantId) => {
+      return reviews.value.filter((review) => review.restaurant_id === restaurantId);
+    };
+
+    const filteredMenu = (restaurantId) => {
+      return menus.value.filter((menuItem) => menuItem.restaurant_id === restaurantId);
+    };
+
+    const getUserById = (userId) => {
+      return users.value.find((user) => user.id === userId) || {};
+    };
 
     return {
       restaurants,
-      
+      reviews,
+      users,
+      showReviews,
+      showMenu,
+      toggleReviews,
+      toggleMenu,
+      filteredReviews,
+      filteredMenu,
+      getUserById,
     };
   },
-  methods:{
-    
-  }
-
-}
+};
 </script>
-  
+
 <style>
+.main{
+  width: 60%;
+  
+  margin: auto;
+}
 .restaurant-block {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  padding: 10px;
-  justify-content: center;
-  
-
+  padding: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .restaurant-name {
-  font-size: 1.6rem;
-  padding: 5px;
+  font-size: 1.8rem;
+  padding: 10px 0;
   font-weight: bold;
+  color: #333;
+  border-bottom: 2px solid #ccc;
 }
 
 .restaurant-description {
-  font-size: 1rem;
-  width: 50%;
+  font-size: 1.2rem;
+  width: 100%;
   word-wrap: break-word;
-  text-align: center;
-  justify-content: center;
-  margin: auto;
+  text-align: justify;
+  margin: 20px 0;
+  color: #666;
 }
 
-.restaurant-review{
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.restaurant-review,
+.restaurant-menu {
   font-weight: bold;
+  font-size: 1.2rem;
+  color: #333;
+  margin-top: 20px;
 }
 
+.menu-item,
+.review-block {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+.menu-item-name,
+.review-username {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.menu-item-price,
+.review-text {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.menu-item-description {
+  font-size: 1.1rem;
+  color: #777;
+}
 
 </style>

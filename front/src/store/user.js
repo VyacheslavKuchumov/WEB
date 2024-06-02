@@ -3,12 +3,17 @@ import instance from "@/middlewares"
 export default {
     name: 'user',
     state: () => ({
-        user: null
+        user: null,
+        allUsers: null,
     }),
     mutations: {
         setUser(state, user) {
             state.user = user
+        },
+        setAllUsers(state, users) {
+            state.allUsers = users
         }
+
     },
     actions: {
         async getUserByUid({ commit }) {
@@ -21,6 +26,16 @@ export default {
             const response = await instance.put('/api/users/likes', {likes})
             if (response.ok) return console.log('ok');
             console.log(response.statusText);
+        },
+        async getAllUsers({commit}){
+            try {
+                const response = await instance.get(`/api/users`); 
+                if (response.data) {
+                    commit('setAllUsers', response.data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch users:', error);
+            }
         }
     },
     

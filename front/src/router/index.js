@@ -5,7 +5,7 @@ import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import instance from '@/middlewares'
 import Restaraunts from '@/views/Restaraunts.vue'
-import Reviews from '@/views/Reviews.vue'
+import Orders from '@/views/Orders.vue'
 const routes = [
   {
     path: '/',
@@ -34,9 +34,9 @@ const routes = [
     component: Restaraunts
   },
   {
-    path: '/reviews',
-    name: 'reviews',
-    component: Reviews
+    path: '/orders',
+    name: 'orders',
+    component: Orders
   }
 ]
 

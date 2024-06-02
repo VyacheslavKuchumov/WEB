@@ -1,4 +1,5 @@
 const { restaurant } = require('../models/restaurants')
+const { menu } = require('../models/menus')
 
 const getRestaurants = async (req, res) => {
     try {
@@ -10,6 +11,17 @@ const getRestaurants = async (req, res) => {
     }
 }
 
+const getMenu = async (req, res) => {
+    try {
+        const menus = await menu.findAll()
+        if (!menus) return res.status(404).send({ message: 'menu not found' })
+        return res.json(menus)
+    } catch (error) {
+        return res.status(500).send({ message: error.message })
+    }
+}
+
 module.exports = {
-    getRestaurants
+    getRestaurants,
+    getMenu
 }
