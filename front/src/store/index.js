@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import auth from '@/store/auth'
 import user from '@/store/user'
 import restaurant from '@/store/restaurant';
+import review from './review';
 
 export default createStore({
   state: {
@@ -15,6 +16,7 @@ export default createStore({
   modules: {
     auth: auth,
     user: user,
-    restaurant: restaurant
+    restaurant: restaurant,
+    review: review
   }
 })

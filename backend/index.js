@@ -10,6 +10,7 @@ const port = process.env.PORT
 const auth_routes = require ('./routes/auth')
 const users_routes = require ('./routes/users')
 const restaurants_routes = require('./routes/restaurants')
+const reviews_routes = require('./routes/reviews')
 
 app.use(cors({
     origin: ['http://localhost:8080']
@@ -18,6 +19,7 @@ app.use(cors({
 app.use('/api/auth', auth_routes)
 app.use('/api/users', users_routes)
 app.use('/api/restaurants', restaurants_routes)
+app.use('/api/reviews', reviews_routes)
 
 app.use((error, request, response, next) => {
     if (error instanceof SyntaxError)
