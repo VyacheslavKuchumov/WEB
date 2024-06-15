@@ -3,6 +3,7 @@
     <router-link to="/">Главная</router-link>  
     <router-link to="/restaraunts">Рестораны</router-link>
     <router-link v-if="isAuth" to="/orders">Заказать</router-link>
+    <router-link v-if="isAuth" to="/order_history">История заказов</router-link>
     <router-link to="/about">О нас</router-link> 
     <router-link v-if="!isAuth" to="/login">Войти</router-link>
     
@@ -61,4 +62,10 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+  }
 </style>

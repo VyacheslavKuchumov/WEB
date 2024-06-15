@@ -2,7 +2,7 @@
   <div>
     <h1>Заказать</h1>
     
-    <form @submit.prevent="go_order()">
+    <form @submit.prevent="go_order">
       <div v-for="(orderItem, index) in orderItems" :key="index">
         <label for="restaurants">Выберите ресторан:</label>
         <select v-model="orderItem.restaurant" @change="updateMenus(index)">
@@ -18,7 +18,7 @@
           Цена: {{ orderItem.dish.price }} руб.
         </div>
 
-        <button type="button" @click="removeOrderItem(index)" class="form-btn">Удалить позицию</button>
+        <button id="delete-btn" type="button" @click="removeOrderItem(index)" class="form-btn">Удалить позицию</button>
       </div>
       
       <button type="button" @click="addOrderItem" class="form-btn">Добавить позицию заказа</button>
@@ -27,97 +27,166 @@
         <strong>Общая стоимость заказа: {{ totalCost }} руб.</strong>
       </div>
       
-      <button type="submit" class="form-btn">Оформить заказ</button>
+      <button id="post-order-btn" type="submit" class="form-btn">Оформить заказ</button>
     </form>
   </div>
 </template>
 
 <script>
-import { useStore } from 'vuex';
-import { onMounted, computed, reactive } from 'vue';
-
 export default {
-  setup() {
-    const store = useStore();
-    const restaurants = computed(() => store.state.restaurant.restaurants);
-    const menus = computed(() => store.state.restaurant.menus);
-    // const user_id = computed(() => store.state.user.user.id);
-
-    const orderItems = reactive([]);
-
-    onMounted(async () => {
+  data() {
+    return {
+      orderItems: []
+    };
+  },
+  computed: {
+    restaurants() {
+      return this.$store.state.restaurant.restaurants;
+    },
+    menus() {
+      return this.$store.state.restaurant.menus;
+    },
+    totalCost() {
+      return this.orderItems.reduce((total, item) => {
+        return total + (item.dish ? item.dish.price : 0);
+      }, 0);
+    }
+  },
+  methods: {
+    async fetchData() {
       try {
         await Promise.all([
-          store.dispatch('restaurant/getRestaurants'),
-          store.dispatch('restaurant/getMenus'),
-          store.dispatch('user/getUserByUid')
+          this.$store.dispatch('restaurant/getRestaurants'),
+          this.$store.dispatch('restaurant/getMenus'),
+          this.$store.dispatch('user/getUserByUid')
         ]);
       } catch (error) {
         console.error('An error occurred:', error);
       }
-    });
-
-    const addOrderItem = () => {
-      orderItems.push({
+    },
+    addOrderItem() {
+      this.orderItems.push({
         restaurant: null,
         dish: null
       });
-    };
-
-    const removeOrderItem = (index) => {
-      orderItems.splice(index, 1);
-    };
-
-    const updateMenus = (index) => {
-      orderItems[index].dish = null; // Reset dish selection when restaurant changes
-    };
-
-    const filteredMenus = (selectedRestaurant) => {
+    },
+    removeOrderItem(index) {
+      this.orderItems.splice(index, 1);
+    },
+    updateMenus(index) {
+      this.orderItems[index].dish = null;
+    },
+    filteredMenus(selectedRestaurant) {
       if (!selectedRestaurant) return [];
-      return menus.value.filter(menu => menu.restaurant_id === selectedRestaurant.id);
-    };
-
-    const totalCost = computed(() => {
-      return orderItems.reduce((total, item) => {
-        return total + (item.dish ? item.dish.price : 0);
-      }, 0);
-    });
-
-    const go_order = () => {
-      
+      return this.menus.filter(menu => menu.restaurant_id === selectedRestaurant.id);
+    },
+    go_order() {
       const data = {
-        user_id: store.state.user.user.id,
-        dishes: orderItems.map(item => ({
+        user_id: this.$store.state.user.user.id,
+        dishes: this.orderItems.map(item => ({
           restaurant_id: item.restaurant.id,
           dish_id: item.dish.id
         }))
       };
-      store.dispatch('restaurant/order', data);
-      
+      this.$store.dispatch('restaurant/order', data);
       // window.location.reload();
-    };
-
-    return {
-      restaurants,
-      menus,
-      orderItems,
-      addOrderItem,
-      removeOrderItem,
-      updateMenus,
-      filteredMenus,
-      totalCost,
-      go_order,
-      
-    };
+    }
   },
-  
+  mounted() {
+    this.fetchData();
+  }
 };
 </script>
 
-
 <style>
-  form{
-    width: 80%;
-    margin: auto;
-  }
+#post-order-btn{
+  background-color: #28a745;
+}
+#delete-btn{
+  background-color: rgb(222, 50, 50);
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+form {
+  width: 60%;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.order-item {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+  color: #555;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-btn:hover {
+  background-color: #0056b3;
+}
+
+.add-btn {
+  background-color: #28a745;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
+
+.submit-btn {
+  background-color: #ffc107;
+}
+
+.submit-btn:hover {
+  background-color: #e0a800;
+}
+
+.total-cost {
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+  color: #000;
+}
 </style>

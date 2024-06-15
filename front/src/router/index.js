@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import instance from '@/middlewares'
 import Restaraunts from '@/views/Restaraunts.vue'
 import Orders from '@/views/Orders.vue'
+import OrderHistory from '@/views/OrderHistory.vue'
 const routes = [
   {
     path: '/',
@@ -37,6 +38,11 @@ const routes = [
     path: '/orders',
     name: 'orders',
     component: Orders
+  },
+  {
+    path: '/order_history',
+    name: 'order_history',
+    component: OrderHistory
   }
 ]
 

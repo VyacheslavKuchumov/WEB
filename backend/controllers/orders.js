@@ -1,15 +1,35 @@
 const { order } = require('../models/orders')
 const { order_item } = require('../models/order_items')
+const { Op} = require('sequelize')
 
 const getOrdersByUser = async (req, res) => {
     try {
-        const orders = await order.findAll({ where: { user_id: req.params?.user_id } })
+        const orders = await order.findAll({ 
+            where: { user_id: req.params?.user_id },
+            order: [
+              ['order_date', 'DESC'] // or 'DESC' for descending order
+            ] })
         if (!orders) return res.status(404).send({ message: 'Orders not found' })
+        
         return res.json(orders)
     } catch (error) {
         return res.status(500).send({ message: error.message })
     }
 }
+
+const getOrderItems = async (req, res) => {
+    try {
+        const orderItems = await order_item.findAll(
+            // {where: {order_id: [12, 13]}}
+        )
+        if (!orderItems) return res.status(404).send({ message: 'Order items not found wtf' })
+        
+        return res.json(orderItems)
+    } catch (error) {
+        return res.status(500).send({ message: error.message })
+    }
+}
+
 
 const createOrder = async (req, res) => {
     try {
@@ -46,4 +66,5 @@ module.exports = {
     getOrdersByUser,
     createOrder,
     createOrderItem,
+    getOrderItems
 }

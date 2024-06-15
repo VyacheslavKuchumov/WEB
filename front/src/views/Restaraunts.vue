@@ -37,84 +37,68 @@
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { useStore } from 'vuex';
-import { onMounted, computed, reactive } from 'vue';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'RestaurantView',
-  setup() {
-    const store = useStore();
-
-    const showReviews = reactive({});
-    const showMenu = reactive({});
-
-    onMounted(async () => {
-      try {
-        await Promise.all([
-          store.dispatch('restaurant/getRestaurants'),
-          store.dispatch('restaurant/getReviews'),
-          store.dispatch('user/getAllUsers'),
-          store.dispatch('restaurant/getMenus') // Assuming there's an action to fetch menus
-        ]);
-      } catch (error) {
-        console.error('An error occurred:', error);
-      }
-    });
-
-    const restaurants = computed(() => store.state.restaurant.restaurants);
-    const reviews = computed(() => store.state.restaurant.reviews);
-    const users = computed(() => store.state.user.allUsers);
-    const menus = computed(() => store.state.restaurant.menus); // Assuming menus are stored here
-
-    const toggleReviews = (restaurantId) => {
-      showReviews[restaurantId] = !showReviews[restaurantId];
-    };
-
-    const toggleMenu = (restaurantId) => {
-      showMenu[restaurantId] = !showMenu[restaurantId];
-    };
-
-    const filteredReviews = (restaurantId) => {
-      return reviews.value.filter((review) => review.restaurant_id === restaurantId);
-    };
-
-    const filteredMenu = (restaurantId) => {
-      return menus.value.filter((menuItem) => menuItem.restaurant_id === restaurantId);
-    };
-
-    const getUserById = (userId) => {
-      return users.value.find((user) => user.id === userId) || {};
-    };
-
+  data() {
     return {
-      restaurants,
-      reviews,
-      users,
-      showReviews,
-      showMenu,
-      toggleReviews,
-      toggleMenu,
-      filteredReviews,
-      filteredMenu,
-      getUserById,
+      showReviews: {},
+      showMenu: {}
     };
   },
+  computed: {
+    ...mapState({
+      restaurants: state => state.restaurant.restaurants,
+      reviews: state => state.restaurant.reviews,
+      users: state => state.user.allUsers,
+      menus: state => state.restaurant.menus
+    })
+  },
+  methods: {
+    ...mapActions('restaurant', ['getRestaurants', 'getReviews', 'getMenus']),
+    ...mapActions('user', ['getAllUsers']),
+    toggleReviews(restaurantId) {
+      this.showReviews = { ...this.showReviews, [restaurantId]: !this.showReviews[restaurantId] };
+    },
+    toggleMenu(restaurantId) {
+      this.showMenu = { ...this.showMenu, [restaurantId]: !this.showMenu[restaurantId] };
+    },
+    filteredReviews(restaurantId) {
+      return this.reviews.filter((review) => review.restaurant_id === restaurantId);
+    },
+    filteredMenu(restaurantId) {
+      return this.menus.filter((menuItem) => menuItem.restaurant_id === restaurantId);
+    },
+    getUserById(userId) {
+      return this.users.find((user) => user.id === userId) || {};
+    }
+  },
+  mounted() {
+    Promise.all([
+      this.getRestaurants(),
+      this.getReviews(),
+      this.getAllUsers(),
+      this.getMenus()
+    ]).catch((error) => {
+      console.error('An error occurred:', error);
+    });
+  }
 };
 </script>
 
 <style>
-.main{
+.main {
   width: 60%;
-  
   margin: auto;
 }
+
 .restaurant-block {
   display: flex;
   flex-direction: column;
@@ -192,5 +176,4 @@ button:hover {
   font-size: 1.1rem;
   color: #777;
 }
-
 </style>

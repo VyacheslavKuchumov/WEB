@@ -7,6 +7,8 @@ export default {
         restaurants: null,
         reviews: null,
         menus: null,
+        orders: null,
+        orderItems: null,
     }),
     mutations: {
         setRestaurants(state, restaurants) { 
@@ -17,9 +19,26 @@ export default {
         },
         setMenus(state, menus) { 
             state.menus = menus;
+        },
+        setOrders(state, orders) { 
+            state.orders = orders;
+        },
+        setOrderItems(state, orderItems) { 
+            state.orderItems = orderItems;
         }
     },
     actions: {
+        async getOrderItems({commit } ) {  
+            const orderItems = await instance.get(`/api/orders/get_order_items`)
+            if (orderItems) return commit('setOrderItems', orderItems.data)
+            
+        },
+        async getOrderHistory({commit }, user_id) {
+            
+            const orders = await instance.get(`/api/orders/get_orders/${user_id}`)
+            if (orders) return commit('setOrders', orders.data)
+            console.log(orders);
+        },
         async order({}, {user_id, dishes}){
             try {
                 // Create the order
