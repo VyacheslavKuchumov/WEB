@@ -12,6 +12,7 @@ export default {
 </script>
 <style scoped>
     .btn{
+        color: black;
         padding: 10px;
         cursor: pointer;
         background-color: white;

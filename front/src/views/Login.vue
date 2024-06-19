@@ -44,6 +44,7 @@ export default {
 
 <style>
 .home {
+    color: black;
     position: relative;
     display: flex;
     flex-direction: column;

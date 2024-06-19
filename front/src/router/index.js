@@ -17,7 +17,7 @@ const routes = [
     path: '/about',
     name: 'about',
     component: AboutView,
-    meta: {auth:true}
+    
   },
   {
     path: '/register',
@@ -37,12 +37,14 @@ const routes = [
   {
     path: '/orders',
     name: 'orders',
-    component: Orders
+    component: Orders,
+    meta: {auth:true}
   },
   {
     path: '/order_history',
     name: 'order_history',
-    component: OrderHistory
+    component: OrderHistory,
+    meta: {auth:true}
   }
 ]
 

@@ -107,6 +107,8 @@ export default {
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  justify-content: center;
+  
 }
 
 .restaurant-name {
@@ -127,9 +129,12 @@ export default {
 }
 
 button {
+  margin: auto;
+  width: 50%;
   padding: 10px 20px;
   font-size: 1rem;
-  margin: 10px 0;
+  margin-bottom: 5px;
+  margin-top: 5px;
   border: none;
   border-radius: 5px;
   background-color: #007bff;

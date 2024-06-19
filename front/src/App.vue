@@ -8,6 +8,7 @@
     <router-link v-if="!isAuth" to="/login">Войти</router-link>
     
     <a v-if="isAuth" @click="logout()">Выйти</a>
+    <div v-if="isAuth" class="user">{{ user.name }}</div>
     
   </nav>
   <router-view/>
@@ -19,8 +20,12 @@ export default{
 
   methods:{
     ...mapActions({
-      logout:'auth/logout'
+      logout:'auth/logout',
+      getUserByUid: 'user/getUserByUid'
     })
+  },
+  beforeMount() {
+    this.getUserByUid()
   },
   mounted() {
     const uid = localStorage.getItem('uid')
@@ -29,7 +34,10 @@ export default{
   computed:{
     ...mapState({
       isAuth: state => state.auth.isAuth
-    })
+    }),
+    user() {
+      return this.$store.state.user.user
+    }
   }
 }
 </script>
@@ -42,25 +50,36 @@ export default{
   text-align: center;
   color: #2c3e50;
 }
-
+.user{
+  color: #ffffff;
+  position: absolute;
+  right: 20px;
+  font-weight: bold;
+}
 nav {
   display: flex;
   flex-direction: row;
   column-gap: 20px;
   margin: auto;
   justify-content: center;
-  width:20vw;
-  margin-top: 50px;
-  margin-bottom: 50px;
+
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background-color: 	#982121;
+  width: 100%;
+  
 }
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #c6b7b7;
+  text-decoration: none;
+  
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #ffffff;
+  text-decoration: underline;
 }
 body {
     font-family: Arial, sans-serif;
