@@ -1,23 +1,10 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="@/assets/3d843572f09b8f0658d7c43621bc00d7.jpg">
+  
+    
     <div class="window">
-      <div class="window-label">
-        Кол-во лайков: {{ likes }}
-        {{text}}
-      </div>
-      <div class="btns">
-        <button class="like" @click="addlike">
-          <img src="@/assets/like.png" alt="" width="40px">
-          <div>Поставить лайк</div>
-        </button>
-        <button class="dislike" @click="adddislike">
-          <img src="@/assets/dislike.png" alt="" width="40px">
-          <div>Поставить дизлайк</div>
-        </button>
-      </div>
+      Сделайте веб-визитку прямо сейчас без СМС но с регистрацией! (без регистрации бан 300 лет) 
     </div>
-  </div>
+  
 </template>
 
 <script>
@@ -84,13 +71,15 @@ export default {
   display: flex;
   flex-direction: column;
   width: 50vw;
-  height: 350px;
+  
   background-color: #CCF0D3;
   border-radius: 10px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   justify-content: center;
-  align-items: center;
-  row-gap: 15px;
+  padding: 20px;
+  font-size: xx-large;
+  font-weight: bold;
 }
 
 .label {

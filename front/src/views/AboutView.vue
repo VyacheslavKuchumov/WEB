@@ -18,12 +18,12 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.user.user
+      return this.$store.state.stuff.data
     }
   },
   methods: {
     ...mapActions({
-      getUserByUid: 'user/getUserByUid'
+      getUserByUid: 'stuff/getUserStuff'
     }),
     createPost(post) {
       this.posts.unshift(post)

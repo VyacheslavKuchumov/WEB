@@ -6,7 +6,7 @@ async function connect() {
         await sequelize.authenticate();
         console.log('SUCCES');
     } catch (error) {
-        console.error('NOT SUCCES')
+        console.error('NOT SUCCES DANIK NEGR')
     }
 }
 connect()
